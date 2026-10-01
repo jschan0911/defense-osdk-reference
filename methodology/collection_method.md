@@ -7,11 +7,17 @@ derived scenario ontology can later be compared against it.
 
 ## Collection boundary
 
-The crawler starts at the official Defense OSDK API root and discovers only URLs matching:
+The crawler starts at the official Defense OSDK API root and accepts only URLs matching:
 
 `.../docs/defense-osdk/api/<domain>/interfaceTypes/<interface>`
 
-It intentionally does not recursively crawl the entire Palantir documentation site.
+It does **not** assume that the root/sidebar is a complete catalogue. Discovery uses three bounded sources:
+
+1. root/sidebar interface links,
+2. the site's XML sitemap,
+3. interface links found on domain-overview and interface pages.
+
+Discovered interface pages are followed until the SDK-ID set reaches a fixed point. The crawler still does not recursively crawl unrelated Palantir documentation.
 
 ## Raw vs normalized
 

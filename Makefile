@@ -2,10 +2,13 @@ PYTHON ?= python3
 SNAPSHOT ?= data/snapshots/2026-10-01
 REFERENCE ?= $(SNAPSHOT)/normalized/defense_osdk_reference.json
 
-.PHONY: setup validate crawl crawl-oob
+.PHONY: setup validate test crawl crawl-oob
 
 setup:
 	$(PYTHON) -m pip install -r requirements.txt
+
+test:
+	$(PYTHON) -m unittest discover -s tests -v
 
 validate:
 	$(PYTHON) tools/validate_reference.py $(REFERENCE)

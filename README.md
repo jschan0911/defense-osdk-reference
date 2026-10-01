@@ -87,6 +87,18 @@ source .venv/bin/activate
 python3 -m pip install -r requirements.txt
 ```
 
+## Crawler v0.2 completeness strategy
+
+The crawler no longer treats the root navigation as an authoritative complete catalogue. It combines root links, the XML sitemap, and cross-links from overview/interface pages, then continues until no new interface `sdk_id` is found.
+
+Run the regression suite:
+
+```bash
+make test
+```
+
+A successful full crawl should report `fixed_point_reached: true`. The manifest also separates root-discovered, sitemap-only, and cross-link-only interfaces.
+
 ## Validate the baseline
 
 ```bash

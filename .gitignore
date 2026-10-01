@@ -18,3 +18,6 @@ tmp/
 # Keep them local/private by default. Commit only after an explicit review.
 data/snapshots/**/raw/*.html
 data/snapshots/**/raw/**/*.html
+
+# Temporary test/edit files
+*.tmp
