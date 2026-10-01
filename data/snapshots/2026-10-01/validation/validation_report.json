@@ -1,0 +1,79 @@
+{
+  "captured_at": "2026-10-01",
+  "summary": {
+    "total_observed_interface_records": 65,
+    "root_navigation_expected_interfaces": 62,
+    "root_navigation_covered": 62,
+    "official_page_only_additional_records": 3,
+    "duplicate_sdk_ids": 0,
+    "unresolved_outgoing_link_targets": 0,
+    "unresolved_incoming_link_sources": 0,
+    "external_non_catalog_inheritance_parents": 2,
+    "unresolved_inheritance_parents": 0,
+    "outgoing_without_incoming_counterpart": 0,
+    "incoming_without_outgoing_counterpart": 0,
+    "unique_pair_metadata_mismatches": 0
+  },
+  "domain_counts": {
+    "common": 6,
+    "intelligence": 12,
+    "missionPlanning": 1,
+    "orderOfBattle": 13,
+    "sustainment": 3,
+    "targetingFires": 30
+  },
+  "catalog_counts": {
+    "root_navigation_listed": 62,
+    "official_page_observed_not_root_navigation_listed": 3
+  },
+  "root_navigation_missing": [],
+  "official_page_only_records": [
+    "Physical Assessment",
+    "Target List",
+    "Target List Assignment"
+  ],
+  "duplicate_sdk_ids": [],
+  "unresolved_outgoing_links": [],
+  "unresolved_incoming_links": [],
+  "external_inheritance_references": [
+    {
+      "child": "Defense Geotemporal Observation",
+      "parent": "Geotemporal Observation"
+    },
+    {
+      "child": "Defense Tracked Entity",
+      "parent": "Tracked Entity"
+    }
+  ],
+  "unresolved_inheritance_references": [],
+  "outgoing_without_incoming_counterpart": [],
+  "incoming_without_outgoing_counterpart": [],
+  "pair_metadata_mismatches": [],
+  "known_documentation_issues": [
+    {
+      "interface": "Organization Hierarchy Node Relationship",
+      "issue": "Current interface page exposes no Properties section, while the current OOB overview describes the relationship pattern as carrying temporal validity.",
+      "handling": "Do not place Valid From/Valid To in declared_properties until a directly retrievable current interface page exposes them."
+    },
+    {
+      "interface": "Intelligence Report",
+      "issue": "Earlier pilot observed prose/Extended interfaces discrepancy.",
+      "handling": "Keep discrepancy flag; do not infer extra inheritance."
+    },
+    {
+      "interface": "Change Assessment",
+      "issue": "Official page marks it deprecated in favor of Physical Assessment, but Physical Assessment is not in the root navigation snapshot.",
+      "handling": "Keep both; mark lifecycle/deployment status separately."
+    },
+    {
+      "interface": "Target List / Target List Assignment",
+      "issue": "Current official pages are retrievable, but root navigation snapshot does not list them.",
+      "handling": "Keep as official-page-only records instead of deleting or treating as root-catalog types."
+    },
+    {
+      "interface": "Ammunition Type / Munition Type",
+      "issue": "Root navigation uses Ammunition Type while newer page context uses Munition Type for the same legacy SDK id.",
+      "handling": "Preserve canonical SDK id and both labels via name+alias."
+    }
+  ]
+}

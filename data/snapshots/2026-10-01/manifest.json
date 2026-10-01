@@ -1,0 +1,56 @@
+{
+  "snapshot_date": "2026-10-01",
+  "reference_status": "v1-candidate",
+  "baseline_kind": "hybrid_verified_reference",
+  "source_root": "https://www.palantir.com/docs/defense-osdk/api",
+  "canonical_key": "sdk_id",
+  "root_navigation_interface_count": 62,
+  "observed_additional_official_pages": [
+    "Physical Assessment",
+    "Target List",
+    "Target List Assignment"
+  ],
+  "normalized_interface_record_count": 65,
+  "files": [
+    {
+      "path": "normalized/defense_osdk_reference.json",
+      "sha256": "06bb86a57926659edbf86abf11c1249acfa0ee54406a544d1aa4969977870fdb",
+      "size_bytes": 254553
+    },
+    {
+      "path": "normalized/inheritance.csv",
+      "sha256": "5588e5a3f1737b253f93dce7b4d23bfbacdb23662e7d65e826b4e3e93f63b5b5",
+      "size_bytes": 4275
+    },
+    {
+      "path": "normalized/interfaces_catalog.csv",
+      "sha256": "9dad23cc38b97f149f738679475867c1ebd5507f89ade9763e6188912973cc57",
+      "size_bytes": 24806
+    },
+    {
+      "path": "normalized/relations.csv",
+      "sha256": "daf112d066541a38da3870ccbc2308227fdc9018f1c1d15551ccbe3ec4e7fcf9",
+      "size_bytes": 38382
+    },
+    {
+      "path": "raw/.gitkeep",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "validation/VALIDATION.md",
+      "sha256": "9132cfadd5994b9d6b380aeeffd19453fc052230a6d30d577cc57ef2b2400450",
+      "size_bytes": 1395
+    },
+    {
+      "path": "validation/validation_report.json",
+      "sha256": "41fe5de907e7b2d547a3198ea810bb1c35e5876969e169f1ba693eb34a98bbd7",
+      "size_bytes": 2979
+    },
+    {
+      "path": "validation/version_drift.json",
+      "sha256": "b7ddb6fee7329d3f7f280857c412cc5b23ca139567cda0402fce519375695b5f",
+      "size_bytes": 2011
+    }
+  ]
+}

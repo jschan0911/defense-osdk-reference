@@ -1,0 +1,30 @@
+{
+  "captured_at": "2026-10-01",
+  "observations": [
+    {
+      "topic": "Root sidebar vs newer indexed pages",
+      "detail": "The root API sidebar snapshot lists 27 Targeting and Fires interfaces, while newer official indexed pages expose at least Physical Assessment, Target List, and Target List Assignment in addition.",
+      "handling": "Keep these as observed active interfaces with verification_status=verified_recent_index_not_root_sidebar; do not assume the sidebar is exhaustive."
+    },
+    {
+      "topic": "Change Assessment -> Physical Assessment",
+      "detail": "Recent official Change Assessment page marks Change Assessment deprecated and explicitly directs users to Physical Assessment.",
+      "handling": "Keep Change Assessment for legacy compatibility, mark lifecycle=deprecated, and use Physical Assessment for new semantic matching."
+    },
+    {
+      "topic": "Target Assessment -> Serviced Assessment",
+      "detail": "The same SDK id com.palantir.ontology.defense-types.targetAssessment has been observed under older display label Target Assessment and newer label Serviced Assessment, with materially different link schema.",
+      "handling": "Use Serviced Assessment as current display label; preserve Target Assessment as alias and record the old schema as version drift rather than merging it."
+    },
+    {
+      "topic": "Ammunition Type -> Munition Type",
+      "detail": "Current page display label is Munition Type while SDK id remains ...ammunitionType.",
+      "handling": "Use current display label Munition Type and preserve Ammunition Type as alias."
+    },
+    {
+      "topic": "Target <-> Target Effect Solution link names",
+      "detail": "Recent Target and Target Effect Solution pages expose non-identical relation naming (generic Target Effect Solutions vs Selected/Proposed Target Effect Solutions).",
+      "handling": "Preserve page-local observations and resolve only after a true single-timestamp crawl or live fetchMetadata inspection."
+    }
+  ]
+}

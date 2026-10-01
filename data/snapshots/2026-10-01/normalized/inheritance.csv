@@ -1,0 +1,23 @@
+﻿domain,child_interface,parent_interface,parent_scope,source_url
+common,Defense Geotemporal Observation,Geotemporal Observation,external_or_generic,https://www.palantir.com/docs/defense-osdk/api/common/interfaceTypes/com-palantir-ontology-defense-types-defenseGeotemporalObservation
+common,Defense Tracked Entity,Tracked Entity,external_or_generic,https://www.palantir.com/docs/defense-osdk/api/common/interfaceTypes/com-palantir-ontology-defense-types-defenseTrackedEntity
+intelligence,COMINT,SIGINT,defense_osdk_record,https://www.palantir.com/docs/defense-osdk/api/intelligence/interfaceTypes/com-palantir-ontology-defense-types-comint
+intelligence,ELINT,SIGINT,defense_osdk_record,https://www.palantir.com/docs/defense-osdk/api/intelligence/interfaceTypes/com-palantir-ontology-defense-types-elint
+intelligence,GEOINT,Intelligence,defense_osdk_record,https://www.palantir.com/docs/defense-osdk/api/intelligence/interfaceTypes/com-palantir-ontology-defense-types-geoint
+intelligence,IMINT,GEOINT,defense_osdk_record,https://www.palantir.com/docs/defense-osdk/api/intelligence/interfaceTypes/com-palantir-ontology-defense-types-imint
+intelligence,Intelligence Report,Report,defense_osdk_record,https://www.palantir.com/docs/defense-osdk/api/intelligence/interfaceTypes/com-palantir-ontology-defense-types-intelligenceReport
+intelligence,MTI,GEOINT,defense_osdk_record,https://www.palantir.com/docs/defense-osdk/api/intelligence/interfaceTypes/com-palantir-ontology-defense-types-mti
+intelligence,OPIR,GEOINT,defense_osdk_record,https://www.palantir.com/docs/defense-osdk/api/intelligence/interfaceTypes/com-palantir-ontology-defense-types-opir
+intelligence,OSINT,Intelligence,defense_osdk_record,https://www.palantir.com/docs/defense-osdk/api/intelligence/interfaceTypes/com-palantir-ontology-defense-types-osint
+intelligence,SIGINT,Intelligence,defense_osdk_record,https://www.palantir.com/docs/defense-osdk/api/intelligence/interfaceTypes/com-palantir-ontology-defense-types-sigint
+orderOfBattle,Equipment Type,Materiel Type,defense_osdk_record,https://www.palantir.com/docs/defense-osdk/api/orderOfBattle/interfaceTypes/com-palantir-ontology-defense-types-equipmentType
+orderOfBattle,Munition Type,Materiel Type,defense_osdk_record,https://www.palantir.com/docs/defense-osdk/api/orderOfBattle/interfaceTypes/com-palantir-ontology-defense-types-ammunitionType
+orderOfBattle,Unit,Organization,defense_osdk_record,https://www.palantir.com/docs/defense-osdk/api/orderOfBattle/interfaceTypes/com-palantir-ontology-defense-types-unit
+sustainment,Materiel Change Event,Report Observation,defense_osdk_record,https://www.palantir.com/docs/defense-osdk/api/sustainment/interfaceTypes/com-palantir-ontology-defense-types-materielChangeEvent
+sustainment,Materiel Status Event,Report Observation,defense_osdk_record,https://www.palantir.com/docs/defense-osdk/api/sustainment/interfaceTypes/com-palantir-ontology-defense-types-materielStatusEvent
+targetingFires,Aimpoint Weapon Employment,Effector Employment,defense_osdk_record,https://www.palantir.com/docs/defense-osdk/api/targetingFires/interfaceTypes/com-palantir-ontology-defense-types-aimpointWeaponEmployment
+targetingFires,Engagement,Operation,defense_osdk_record,https://www.palantir.com/docs/defense-osdk/api/targetingFires/interfaceTypes/com-palantir-ontology-defense-types-engagement
+targetingFires,Geometry-Based Collateral Concern Candidate,Collateral Concern Candidate,defense_osdk_record,https://www.palantir.com/docs/defense-osdk/api/targetingFires/interfaceTypes/com-palantir-ontology-defense-types-collateralConcernCandidateWithGeometry
+targetingFires,Point-Based Collateral Concern Candidate,Collateral Concern Candidate,defense_osdk_record,https://www.palantir.com/docs/defense-osdk/api/targetingFires/interfaceTypes/com-palantir-ontology-defense-types-collateralConcernCandidatePoint
+targetingFires,Targetable Entity,Intelligence Subject,defense_osdk_record,https://www.palantir.com/docs/defense-osdk/api/targetingFires/interfaceTypes/com-palantir-ontology-defense-types-targetableEntity
+targetingFires,Targeting Operation,Operation,defense_osdk_record,https://www.palantir.com/docs/defense-osdk/api/targetingFires/interfaceTypes/com-palantir-ontology-defense-types-targetingOperation
