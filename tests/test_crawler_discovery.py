@@ -161,6 +161,67 @@ class SitemapDiscoveryTests(unittest.TestCase):
         self.assertEqual(result["sitemap_only_count"], 1)
         self.assertEqual(result["total_unique_sdk_ids"], 1)
         self.assertIn("com.palantir.ontology.defense-types.hiddenNewInterface", result["sitemap_only_sdk_ids"])
+    def test_nested_heading_boundary_does_not_leak_into_extends(self):
+        url = interface_url("equipment")
+        html = """<html><body><main>
+        <h1>Equipment</h1>
+        <p>[Palantir Defense Ontology] Equipment as a specialization of materiel type.</p>
+        <h2><a><span>Extended interfaces</span></a></h2>
+        <div><a href="%s"><span>Materiel Type ↗</span></a></div>
+        <h2><a><span>OSDK Examples</span></a></h2>
+        <div><a><span>Load Equipment metadata</span></a></div>
+        </main></body></html>""" % interface_url("materielType")
+        meta = crawler.interface_meta_from_url(url, "Equipment")
+        iface = crawler.parse_interface(html, meta)
+        self.assertEqual(iface.extends, ["Materiel Type"])
+
+    def test_live_dom_duplicate_target_cleanup(self):
+        header = [
+            "Materiel Type→ Materiel Type Materiel Type optional optional",
+            "One To One optional",
+        ]
+        name, target, card, required, _ = crawler.parse_link_header(header)
+        self.assertEqual(name, "Materiel Type")
+        self.assertEqual(target, "Materiel Type")
+        self.assertEqual(card, "One To One")
+        self.assertFalse(required)
+
+    def test_live_dom_concatenated_optional_cleanup(self):
+        header = [
+            "Munition Effectiveness Assessments→ Munition Effectiveness Assessment "
+            "Munition Effectiveness Assessment optionaloptional",
+            "One To Many optional",
+        ]
+        name, target, card, required, _ = crawler.parse_link_header(header)
+        self.assertEqual(name, "Munition Effectiveness Assessments")
+        self.assertEqual(target, "Munition Effectiveness Assessment")
+        self.assertEqual(card, "One To Many")
+        self.assertFalse(required)
+
+    def test_deprecated_target_label_is_preserved(self):
+        header = [
+            "Change Assessments→ [DEPRECATED] Change Assessment "
+            "[DEPRECATED] Change Assessment optional optional",
+            "One To Many optional",
+        ]
+        name, target, card, required, _ = crawler.parse_link_header(header)
+        self.assertEqual(name, "Change Assessments")
+        self.assertEqual(target, "[DEPRECATED] Change Assessment")
+        self.assertEqual(card, "One To Many")
+        self.assertFalse(required)
+
+    def test_engagement_target_effect_solution_cleanup(self):
+        header = [
+            "Target Effect Solution→ Target Effect Solution "
+            "Target Effect Solution optional optional",
+            "One To One optional",
+        ]
+        name, target, card, required, _ = crawler.parse_link_header(header)
+        self.assertEqual(name, "Target Effect Solution")
+        self.assertEqual(target, "Target Effect Solution")
+        self.assertEqual(card, "One To One")
+        self.assertFalse(required)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Palantir Defense OSDK public API reference crawler (v0.2).
+"""Palantir Defense OSDK public API reference crawler (v0.2.1).
 
 Purpose
 -------
@@ -43,7 +43,7 @@ import requests
 from bs4 import BeautifulSoup, Tag
 
 ROOT = "https://www.palantir.com/docs/defense-osdk/api"
-UA = "DefenseOSDKReferenceCrawler/0.2 (+ontology research; low-rate public-doc snapshot)"
+UA = "DefenseOSDKReferenceCrawler/0.2.1 (+ontology research; low-rate public-doc snapshot)"
 INTERFACE_RE = re.compile(
     r"^/docs/defense-osdk/api/(?P<domain>[^/]+)/interfaceTypes/(?P<slug>[^/?#]+)/?$"
 )
@@ -510,16 +510,36 @@ def section_node(main: Tag, heading: str) -> Optional[Tag]:
 
 
 def section_text_lines(h2: Optional[Tag]) -> list[str]:
+    """Collect leaf-ish text belonging to one documentation section only.
+
+    Palantir's rendered headings can contain nested anchors/spans.  A plain
+    ``find_all_next`` loop that stops only when it sees the next ``h2`` can
+    therefore leak the *child text* of the next heading into the current
+    section (for example ``Link constraints`` into ``Extended interfaces``).
+    Stop when either the element itself, or one of its ancestors, is another
+    heading.
+    """
     if not h2:
         return []
+
+    heading_tags = {"h1", "h2", "h3", "h4", "h5", "h6"}
     out: list[str] = []
+
     for el in h2.find_all_next():
-        if el is h2:
+        if el is h2 or not isinstance(el, Tag):
             continue
-        if isinstance(el, Tag) and el.name == "h2":
+
+        # Skip descendants of the current heading itself.
+        if h2 in el.parents:
+            continue
+
+        # Stop at the next rendered heading, even when traversal reaches a
+        # nested anchor/span before a clean heading boundary is otherwise seen.
+        if el.name in heading_tags:
             break
-        if not isinstance(el, Tag):
-            continue
+        if any(isinstance(p, Tag) and p.name in heading_tags for p in el.parents):
+            break
+
         if el.name in {"p", "a", "button", "code", "span", "div", "li"}:
             if any(isinstance(c, Tag) and c.name in {"div", "p", "li"} for c in el.children):
                 continue
@@ -602,39 +622,87 @@ def parse_interface_list(lines: list[str]) -> list[str]:
     return out
 
 
+def _strip_link_metadata(text: str) -> str:
+    """Remove rendered cardinality/requiredness/UI tokens from link labels.
+
+    Palantir's rendered DOM can duplicate leaf text and can occasionally
+    concatenate requirement tokens (e.g. ``optionaloptional``).  This cleanup
+    is deliberately limited to metadata tokens so semantic labels such as
+    ``[DEPRECATED] Change Assessment`` remain intact.
+    """
+    x = clean(text.replace("↗", " ").replace("·", " "))
+    for c in CARDINALITIES:
+        x = re.sub(rf"\b{re.escape(c)}\b", " ", x, flags=re.I)
+
+    # Remove both normal and concatenated repetitions:
+    # "optional", "optional optional", "optionaloptional", etc.
+    x = re.sub(r"(?i)(?:optional|required)(?:\s*(?:optional|required))*", " ", x)
+    return clean(x)
+
+
+def _collapse_repeated_phrase(text: Optional[str]) -> Optional[str]:
+    """Collapse an exact duplicated rendered phrase: ``X X`` -> ``X``."""
+    if not text:
+        return text
+    toks = clean(text).split()
+    if len(toks) % 2 == 0:
+        half = len(toks) // 2
+        if toks[:half] == toks[half:]:
+            return " ".join(toks[:half])
+    return clean(text)
+
+
+def _required_from_rendered_text(text: str) -> Optional[bool]:
+    """Parse requiredness despite duplicated/concatenated DOM text."""
+    hits = re.findall(r"(?i)optional|required", text)
+    if not hits:
+        return None
+    # A well-formed entry is one semantic value repeated by rendering.
+    # If conflicting tokens ever occur, prefer required and let raw_header
+    # preserve the anomaly for audit.
+    lowered = [x.lower() for x in hits]
+    if "required" in lowered:
+        return True
+    return False
+
+
 def parse_link_header(header: list[str]) -> tuple[Optional[str], Optional[str], Optional[str], Optional[bool], list[str]]:
     raw = header[:]
     header = [x for x in header if x not in {"Link constraints", "Incoming link constraints"}]
-    req: Optional[bool] = None
-    card: Optional[str] = None
+
     joined = " ".join(header)
-    for c in CARDINALITIES:
-        if c in joined:
-            card = c
-            header = [x for x in header if x != c]
-            if c not in header and c in " ".join(header):
-                joined2 = " ".join(header).replace(c, " ")
-                header = [clean(joined2)] if clean(joined2) else []
-            break
-    cleaned: list[str] = []
-    for x in header:
-        xl = x.lower()
-        if xl in REQ_TOKENS:
-            req = xl == "required"
-        elif x not in {"↗", "·"}:
-            cleaned.append(x)
-    header = cleaned
+    card = next(
+        (c for c in CARDINALITIES if re.search(rf"\b{re.escape(c)}\b", joined, flags=re.I)),
+        None,
+    )
+    req = _required_from_rendered_text(joined)
+
     name = target = None
-    if header:
-        arrow_line = next((x for x in header if "→" in x), None)
-        if arrow_line:
-            left, right = arrow_line.split("→", 1)
-            name = clean(left.replace("↗", "").replace("·", "")) or None
-            target = clean(right.replace("↗", "").replace("·", "")) or None
-        elif len(header) >= 2:
-            name, target = header[0], header[1]
-        else:
-            name = header[0]
+
+    # Prefer the rendered relationship line containing the directional arrow.
+    arrow_line = next((x for x in header if "→" in x), None)
+    if arrow_line:
+        left, right = arrow_line.split("→", 1)
+        name = _collapse_repeated_phrase(_strip_link_metadata(left)) or None
+        target = _collapse_repeated_phrase(_strip_link_metadata(right)) or None
+    else:
+        cleaned: list[str] = []
+        for x in header:
+            x2 = _strip_link_metadata(x)
+            if x2 and x2 not in {"Link constraints", "Incoming link constraints"}:
+                cleaned.append(x2)
+
+        # De-duplicate repeated leaf-node emissions while preserving order.
+        deduped: list[str] = []
+        for x in cleaned:
+            if x not in deduped:
+                deduped.append(x)
+
+        if deduped:
+            name = _collapse_repeated_phrase(deduped[0])
+        if len(deduped) >= 2:
+            target = _collapse_repeated_phrase(deduped[1])
+
     return name, target, card, req, raw
 
 
