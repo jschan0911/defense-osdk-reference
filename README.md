@@ -1,4 +1,3 @@
-```markdown
 # Defense OSDK Reference
 
 Unofficial, versioned research reference for the public Palantir Defense OSDK API.
